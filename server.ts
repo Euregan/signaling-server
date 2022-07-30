@@ -34,12 +34,15 @@ new WebSocket.Server({ server }).on("connection", (ws, request) => {
     // Parsing the message and adding the sender
     const message = {
       ...JSON.parse(raw.toString()),
+      sender: id,
     };
+
     // For each client in the room
     Object.keys(rooms[room]).forEach((peerId) => {
-      // If there is no particular recipient, or if the recipient is the current client
       if (
+        // If the current peer is not the current client
         peerId !== id &&
+        // If there is no particular recipient, or if the recipient is the current peer
         (!message.recipient || message.recipient === peerId)
       ) {
         // Forward the message
